@@ -1,113 +1,324 @@
-import Image from "next/image";
+"use client";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
 
-export default function Home() {
+const Home = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const [particulars, setParticulars] = useState(null);
+  const [isValid, setIsValid] = useState(false);
+
+  const onSubmit = (data) => {
+    setParticulars(data);
+  };
+
+  console.log(particulars);
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
+    <section className="py-[90px]">
+      <div className="bg-white p-6 max-w-xl mx-auto rounded">
+        {particulars !== null ? (
+          <>
+            {!isValid && (
+              <div>
+                <h4 className="text-xl font-bold mb-2">
+                  Please ensure all information is correct
+                </h4>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  Name: {particulars.name}
+                </div>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  Address: {particulars.address}
+                </div>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  Phone: {particulars.phone}
+                </div>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  City: {particulars.city}
+                </div>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  Postal: {particulars.postal}
+                </div>
+                <div className="text-gray-800 text-sm mb-2 block">
+                  Subscription: $ {particulars.subscription}
+                </div>
+                <div className="text-end mt-2">
+                  <button
+                    type="button"
+                    className="bg-blue-600 px-4 py-2 rounded text-white text-sm"
+                    onClick={() => setIsValid(true)}
+                  >
+                    Confirm
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {isValid && (
+              <div className="text-center">
+                <p className="text-2xl font-bold mb-6">Thank You</p>
+                <div className="text-center">
+                  <button
+                    type="button"
+                    className="bg-blue-600 px-4 py-2 rounded text-white text-sm"
+                    onClick={() => {
+                      setIsValid(false);
+                      setParticulars(null);
+                    }}
+                  >
+                    Back To Home
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            <div className="mb-2">
+              <h4 className="text-xl font-bold">Membership Application</h4>
+              <p className="py-2 text-gray-600 text-sm">
+                To apply for membership please complete all questions.
+              </p>
+            </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="mb-4">
+                <label
+                  htmlFor="name"
+                  className="text-gray-800 text-sm mb-2 block"
+                >
+                  Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  {...register("name", {
+                    required: "The Name field is required",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.name ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded focus:outline-none`}
+                  placeholder="Your Name"
+                />
+
+                {errors.name && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.name.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="address"
+                  className="text-gray-800 text-sm mb-2 block"
+                >
+                  Address
+                </label>
+                <input
+                  id="address"
+                  type="text"
+                  {...register("address", {
+                    required: "The Address field is required",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.address ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded focus:outline-none`}
+                  placeholder="Your Address"
+                />
+
+                {errors.address && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.address.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="phone"
+                  className="text-gray-800 text-sm mb-2 block"
+                >
+                  Phone No
+                </label>
+                <input
+                  id="phone"
+                  type="text"
+                  {...register("phone", {
+                    required: "This Phone field is required",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.phone ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded focus:outline-none`}
+                  placeholder="Phone No"
+                />
+
+                {errors.phone && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.phone.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label className="text-gray-800 text-sm mb-2 block">City</label>
+                <input
+                  type="text"
+                  {...register("city", {
+                    required: "This City field is required",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.city ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded`}
+                  placeholder="City"
+                />
+
+                {errors.city && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.city.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label
+                  htmlFor="postal"
+                  className="text-gray-800 text-sm mb-2 block"
+                >
+                  Postal Code
+                </label>
+                <input
+                  id="postal"
+                  type="text"
+                  {...register("postal", {
+                    required: "This Postal is required",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.postal ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded focus:outline-none`}
+                  placeholder="Postal Code"
+                />
+
+                {errors.postal && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.postal.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-4">
+                <label className="text-gray-800 text-sm mb-2 block">
+                  Country
+                </label>
+                <select
+                  {...register("country", {
+                    required: "Please select a country",
+                  })}
+                  className={`w-full text-gray-800 bg-white border ${
+                    errors.country ? "border-red-600" : "border-gray-300"
+                  } text-sm px-4 py-2.5 rounded focus:outline-none`}
+                >
+                  <option value="">Select Country</option>
+                  <option value="United States">United States</option>
+                  <option value="German">German</option>
+                </select>
+
+                {errors.country && (
+                  <p className="text-xs font-semibold mt-2 text-red-600">
+                    {errors.country.message}
+                  </p>
+                )}
+              </div>
+
+              <div className="mb-2">
+                <h4 className="text-xl font-bold">Subscription Plan</h4>
+                <p className="py-2 text-gray-600 text-sm mb-4">
+                  Please Choose Subscription Plan
+                </p>
+                <div>
+                  <ul className="w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                      <div className="flex items-center ps-3">
+                        <input
+                          id="list-radio-id"
+                          {...register("subscription")}
+                          type="radio"
+                          value="30.00"
+                          defaultChecked
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        <label
+                          htmlFor="list-radio-id"
+                          className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Gold Membership{" "}
+                          <span className="text-gray-500 text-sm ml-2">
+                            $30.00/Month
+                          </span>
+                        </label>
+                      </div>
+                    </li>
+                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                      <div className="flex items-center ps-3">
+                        <input
+                          id="list-radio-military"
+                          {...register("subscription")}
+                          type="radio"
+                          value="20.00"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        <label
+                          htmlFor="list-radio-military"
+                          className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Silver Membership{" "}
+                          <span className="text-gray-500 text-sm ml-2">
+                            $20.00/Month
+                          </span>
+                        </label>
+                      </div>
+                    </li>
+                    <li className="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                      <div className="flex items-center ps-3">
+                        <input
+                          id="list-radio-passport"
+                          type="radio"
+                          {...register("subscription")}
+                          value="10.00"
+                          className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                        />
+                        <label
+                          htmlFor="list-radio-passport"
+                          className="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                        >
+                          Bronze Membership{" "}
+                          <span className="text-gray-500 text-sm ml-2">
+                            $10.00/Month
+                          </span>
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                  {errors.subscription && (
+                    <p className="text-xs font-semibold mt-2 text-red-600">
+                      {errors.subscription.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <button
+                  type="submit"
+                  className="w-full py-3 px-4 tracking-wider text-sm rounded-md text-white bg-blue-600 hover:bg-blue-800 focus:outline-none"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </>
+        )}
       </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800 hover:dark:bg-opacity-30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    </section>
   );
-}
+};
+
+export default Home;
